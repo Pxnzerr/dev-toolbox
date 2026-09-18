@@ -1,5 +1,8 @@
+import os
+import tempfile
 import unittest
-from src.string_utils import slugify, truncate_words, generate_id
+from src.file_utils import load_json, save_json
+from src.string_utils import current_iso_utc, generate_id, slugify, truncate_words
 from src.validators import is_valid_cpf, is_valid_email, only_digits
 
 
@@ -31,6 +34,22 @@ class TestDevToolbox(unittest.TestCase):
         self.assertFalse(is_valid_cpf("111.111.111-11"))
         self.assertFalse(is_valid_cpf("123"))
 
+    def test_current_iso_utc(self):
+        ts = current_iso_utc()
+        self.assertIn("+00:00", ts)
+
+    def test_json_file_utils(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            filepath = os.path.join(tmpdir, "subdir", "config.json")
+            data = {"name": "dev-toolbox", "active": True}
+            save_json(filepath, data)
+            loaded = load_json(filepath)
+            self.assertEqual(loaded, data)
+
+            missing = load_json(os.path.join(tmpdir, "missing.json"), default={"fallback": True})
+            self.assertEqual(missing, {"fallback": True})
+
 
 if __name__ == "__main__":
     unittest.main()
+
