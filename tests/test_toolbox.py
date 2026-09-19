@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 from src.file_utils import load_json, save_json
-from src.string_utils import current_iso_utc, generate_id, slugify, truncate_words
+from src.string_utils import current_iso_utc, generate_id, mask_string, slugify, truncate_words
 from src.validators import is_valid_cpf, is_valid_email, only_digits
 
 
@@ -21,6 +21,12 @@ class TestDevToolbox(unittest.TestCase):
         uid = generate_id("prod")
         self.assertTrue(uid.startswith("prod_"))
         self.assertEqual(len(uid), 5 + 12)
+
+    def test_mask_string(self):
+        self.assertEqual(mask_string("1234567890", 2, 2), "12******90")
+        self.assertEqual(mask_string("abc", 2, 2), "***")
+        self.assertEqual(mask_string("senha123", 1, 1, "#"), "s######3")
+
 
     def test_only_digits(self):
         self.assertEqual(only_digits("abc-123.456/78"), "12345678")
