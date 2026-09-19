@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from src.file_utils import load_json, save_json
 from src.string_utils import current_iso_utc, generate_id, mask_string, slugify, truncate_words
-from src.validators import is_valid_cpf, is_valid_email, only_digits
+from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
 
 
 class TestDevToolbox(unittest.TestCase):
@@ -27,7 +27,6 @@ class TestDevToolbox(unittest.TestCase):
         self.assertEqual(mask_string("abc", 2, 2), "***")
         self.assertEqual(mask_string("senha123", 1, 1, "#"), "s######3")
 
-
     def test_only_digits(self):
         self.assertEqual(only_digits("abc-123.456/78"), "12345678")
 
@@ -39,6 +38,13 @@ class TestDevToolbox(unittest.TestCase):
         # CPFs com todos os digitos iguais sao invalidos
         self.assertFalse(is_valid_cpf("111.111.111-11"))
         self.assertFalse(is_valid_cpf("123"))
+
+    def test_cnpj_validation(self):
+        self.assertTrue(is_valid_cnpj("00.000.000/0001-91"))
+        self.assertTrue(is_valid_cnpj("11.222.333/0001-81"))
+        self.assertFalse(is_valid_cnpj("11.111.111/1111-11"))
+        self.assertFalse(is_valid_cnpj("00.000.000/0001-00"))
+
 
     def test_current_iso_utc(self):
         ts = current_iso_utc()
