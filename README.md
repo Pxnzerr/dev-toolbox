@@ -11,8 +11,8 @@ dev-toolbox/
 ├── src/
 │   ├── __init__.py
 │   ├── file_utils.py      # Operações resilientes de I/O em JSON
-│   ├── string_utils.py    # Slugify, truncamento, gerador de IDs e datas UTC
-│   └── validators.py      # Validação de CPF (módulo 11), e-mail e sanitização
+│   ├── string_utils.py    # Slugify, truncamento, máscara de dados, IDs e UTC
+│   └── validators.py      # Validação de CPF e CNPJ (módulo 11), e-mail e sanitização
 ├── tests/
 │   └── test_toolbox.py    # Suíte de testes unitários
 ├── cli.py                 # Interface interativa de linha de comando
@@ -50,11 +50,21 @@ python cli.py digits "TEL: (11) 98765-4321"
 # Saída: 11987654321
 ```
 
-### 5. Validar formato
+### 5. Mascarar dados sensíveis
+```bash
+python cli.py mask "4532112233445566" --start 4 --end 4
+# Saída: 4532********5566
+```
+
+### 6. Validar formato (CPF, CNPJ, E-mail)
 ```bash
 python cli.py validate email "contato@empresa.com"
 # Saída: E-mail: Valido
+
+python cli.py validate cnpj "00.000.000/0001-91"
+# Saída: CNPJ: Valido
 ```
+
 
 ---
 
