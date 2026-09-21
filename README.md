@@ -11,7 +11,7 @@ dev-toolbox/
 ├── src/
 │   ├── __init__.py
 │   ├── file_utils.py      # Operações resilientes de I/O em JSON
-│   ├── string_utils.py    # Slugify, truncamento, máscara de dados, IDs e UTC
+│   ├── string_utils.py    # Slugify, case naming (snake/camel/pascal), máscara, IDs e UTC
 │   └── validators.py      # Validação de CPF e CNPJ (módulo 11), e-mail e sanitização
 ├── tests/
 │   └── test_toolbox.py    # Suíte de testes unitários
@@ -64,6 +64,19 @@ python cli.py validate email "contato@empresa.com"
 python cli.py validate cnpj "00.000.000/0001-91"
 # Saída: CNPJ: Valido
 ```
+
+### 7. Conversão de Nomenclatura (Case)
+```bash
+python cli.py case "UserProfileModel" --to snake
+# Saída: user_profile_model
+
+python cli.py case "get_user_by_id" --to camel
+# Saída: getUserById
+
+python cli.py case "user_account" --to pascal
+# Saída: UserAccount
+```
+
 
 
 ---
