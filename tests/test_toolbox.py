@@ -2,7 +2,15 @@ import os
 import tempfile
 import unittest
 from src.file_utils import load_json, save_json
-from src.string_utils import current_iso_utc, generate_id, mask_string, slugify, truncate_words
+from src.string_utils import (
+    camel_to_snake,
+    current_iso_utc,
+    generate_id,
+    mask_string,
+    slugify,
+    snake_to_camel,
+    truncate_words,
+)
 from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
 
 
@@ -16,6 +24,14 @@ class TestDevToolbox(unittest.TestCase):
         text = "O rato roeu a roupa do rei"
         self.assertEqual(truncate_words(text, 3), "O rato roeu...")
         self.assertEqual(truncate_words(text, 10), text)
+
+    def test_case_conversions(self):
+        self.assertEqual(camel_to_snake("UserProfileModel"), "user_profile_model")
+        self.assertEqual(camel_to_snake("getUserById"), "get_user_by_id")
+        self.assertEqual(snake_to_camel("get_user_by_id"), "getUserById")
+        self.assertEqual(snake_to_camel("user_profile_model", pascal=True), "UserProfileModel")
+        self.assertEqual(snake_to_camel(""), "")
+
 
     def test_generate_id(self):
         uid = generate_id("prod")

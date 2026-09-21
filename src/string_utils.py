@@ -38,3 +38,20 @@ def mask_string(text: str, visible_start: int = 2, visible_end: int = 2, mask_ch
     masked_count = length - visible_start - visible_end
     return text[:visible_start] + (mask_char * masked_count) + text[length - visible_end:]
 
+
+def camel_to_snake(name: str) -> str:
+    """Converte identificadores de CamelCase ou camelCase para snake_case."""
+    s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+
+
+def snake_to_camel(name: str, pascal: bool = False) -> str:
+    """Converte identificadores de snake_case para camelCase ou PascalCase."""
+    components = [c for c in name.split("_") if c]
+    if not components:
+        return ""
+    if pascal:
+        return "".join(c.capitalize() for c in components)
+    return components[0].lower() + "".join(c.capitalize() for c in components[1:])
+
+
