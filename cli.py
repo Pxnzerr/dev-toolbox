@@ -1,5 +1,12 @@
 import argparse
-from src.string_utils import current_iso_utc, generate_id, mask_string, slugify
+from src.string_utils import (
+    camel_to_snake,
+    current_iso_utc,
+    generate_id,
+    mask_string,
+    slugify,
+    snake_to_camel,
+)
 from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
 
 
@@ -27,6 +34,16 @@ def main() -> None:
     p_mask.add_argument("--end", "-e", type=int, default=2, help="Caracteres visiveis no final")
     p_mask.add_argument("--char", "-c", default="*", help="Caractere de ofuscamento")
 
+    # case
+    p_case = subparsers.add_parser("case", help="Converte nomenclatura de codigo (snake, camel, pascal)")
+    p_case.add_argument("text", help="Identificador a ser convertido")
+    p_case.add_argument(
+        "--to",
+        choices=["snake", "camel", "pascal"],
+        default="snake",
+        help="Formato de destino (padrao: snake)",
+    )
+
     # validate
     p_val = subparsers.add_parser("validate", help="Valida formatos comuns (cpf, email, cnpj)")
     p_val.add_argument("type", choices=["cpf", "email", "cnpj"], help="Tipo de validacao")
@@ -46,6 +63,13 @@ def main() -> None:
         print(current_iso_utc())
     elif args.command == "mask":
         print(mask_string(args.text, args.start, args.end, args.char))
+    elif args.command == "case":
+        if args.to == "snake":
+            print(camel_to_snake(args.text))
+        elif args.to == "camel":
+            print(snake_to_camel(args.text, pascal=False))
+        elif args.to == "pascal":
+            print(snake_to_camel(args.text, pascal=True))
     elif args.command == "digits":
         print(only_digits(args.text))
     elif args.command == "validate":
@@ -63,6 +87,7 @@ def main() -> None:
             print(f"E-mail: {status}")
     else:
         parser.print_help()
+
 
 
 
