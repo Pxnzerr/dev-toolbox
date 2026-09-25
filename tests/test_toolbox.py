@@ -51,6 +51,8 @@ class TestDevToolbox(unittest.TestCase):
         self.assertFalse(is_valid_email("email-invalido@"))
 
     def test_cpf_validation(self):
+        self.assertTrue(is_valid_cpf("529.982.247-25"))
+        self.assertTrue(is_valid_cpf("52998224725"))
         # CPFs com todos os digitos iguais sao invalidos
         self.assertFalse(is_valid_cpf("111.111.111-11"))
         self.assertFalse(is_valid_cpf("123"))
