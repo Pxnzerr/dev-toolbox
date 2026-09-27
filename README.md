@@ -10,7 +10,7 @@ Coleção de utilitários rápidos e scripts CLI para aumentar a produtividade n
 dev-toolbox/
 ├── src/
 │   ├── __init__.py
-│   ├── file_utils.py      # Operações resilientes de I/O em JSON
+│   ├── file_utils.py      # Operações resilientes de I/O em JSON e formatação de bytes
 │   ├── string_utils.py    # Slugify, case naming (snake/camel/pascal), máscara, IDs e UTC
 │   └── validators.py      # Validação de CPF e CNPJ (módulo 11), e-mail e sanitização
 ├── tests/
@@ -77,7 +77,14 @@ python cli.py case "user_account" --to pascal
 # Saída: UserAccount
 ```
 
+### 8. Formatar bytes em tamanho legível
+```bash
+python cli.py bytes 1048576
+# Saída: 1.00 MB
 
+python cli.py bytes 1536 -p 1
+# Saída: 1.5 KB
+```
 
 ---
 

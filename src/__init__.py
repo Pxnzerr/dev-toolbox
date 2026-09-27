@@ -10,7 +10,7 @@ from .string_utils import (
     truncate_words,
 )
 from .validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
-from .file_utils import load_json, save_json
+from .file_utils import format_bytes, load_json, save_json
 
 __all__ = [
     "slugify",
@@ -26,6 +26,7 @@ __all__ = [
     "is_valid_email",
     "load_json",
     "save_json",
+    "format_bytes",
 ]
 
 

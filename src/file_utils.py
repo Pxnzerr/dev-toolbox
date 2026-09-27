@@ -18,3 +18,19 @@ def save_json(filepath: str | Path, data: Any, indent: int = 2) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=indent)
+
+
+def format_bytes(size: int | float, decimal_places: int = 2) -> str:
+    """Formata um tamanho em bytes para uma representacao legivel (B, KB, MB, GB, TB, PB)."""
+    if size < 0:
+        raise ValueError("Tamanho em bytes nao pode ser negativo.")
+    units = ["B", "KB", "MB", "GB", "TB", "PB"]
+    value = float(size)
+    for unit in units:
+        if value < 1024.0 or unit == units[-1]:
+            if unit == "B":
+                return f"{int(value)} B"
+            return f"{value:.{decimal_places}f} {unit}"
+        value /= 1024.0
+    return f"{value:.{decimal_places}f} PB"
+

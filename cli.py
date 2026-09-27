@@ -7,6 +7,7 @@ from src.string_utils import (
     slugify,
     snake_to_camel,
 )
+from src.file_utils import format_bytes
 from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
 
 
@@ -53,6 +54,11 @@ def main() -> None:
     p_dig = subparsers.add_parser("digits", help="Extrai apenas os digitos de um texto")
     p_dig.add_argument("text", help="Texto com formatacoes ou caracteres especiais")
 
+    # bytes
+    p_bytes = subparsers.add_parser("bytes", help="Formata quantidade de bytes em representacao legivel (KB, MB, GB)")
+    p_bytes.add_argument("size", type=int, help="Quantidade em bytes")
+    p_bytes.add_argument("--precision", "-p", type=int, default=2, help="Casas decimais (padrao: 2)")
+
     args = parser.parse_args()
 
     if args.command == "slug":
@@ -85,6 +91,8 @@ def main() -> None:
             valid = is_valid_email(args.value)
             status = "Valido" if valid else "Invalido"
             print(f"E-mail: {status}")
+    elif args.command == "bytes":
+        print(format_bytes(args.size, decimal_places=args.precision))
     else:
         parser.print_help()
 

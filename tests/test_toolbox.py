@@ -1,7 +1,7 @@
 import os
 import tempfile
 import unittest
-from src.file_utils import load_json, save_json
+from src.file_utils import format_bytes, load_json, save_json
 from src.string_utils import (
     camel_to_snake,
     current_iso_utc,
@@ -78,6 +78,16 @@ class TestDevToolbox(unittest.TestCase):
 
             missing = load_json(os.path.join(tmpdir, "missing.json"), default={"fallback": True})
             self.assertEqual(missing, {"fallback": True})
+
+    def test_format_bytes(self):
+        self.assertEqual(format_bytes(0), "0 B")
+        self.assertEqual(format_bytes(512), "512 B")
+        self.assertEqual(format_bytes(1024), "1.00 KB")
+        self.assertEqual(format_bytes(1536, decimal_places=1), "1.5 KB")
+        self.assertEqual(format_bytes(1048576), "1.00 MB")
+        self.assertEqual(format_bytes(1073741824), "1.00 GB")
+        with self.assertRaises(ValueError):
+            format_bytes(-1)
 
 
 if __name__ == "__main__":
