@@ -1,7 +1,9 @@
+import hashlib
 import re
 import unicodedata
 import uuid
 from datetime import datetime, timezone
+
 
 
 def slugify(text: str) -> str:
@@ -53,5 +55,16 @@ def snake_to_camel(name: str, pascal: bool = False) -> str:
     if pascal:
         return "".join(c.capitalize() for c in components)
     return components[0].lower() + "".join(c.capitalize() for c in components[1:])
+
+
+def hash_text(text: str, algorithm: str = "sha256") -> str:
+    """Calcula o hash de um texto usando o algoritmo especificado (sha256, sha1, md5, sha512)."""
+    algo = algorithm.lower().strip()
+    if algo not in hashlib.algorithms_available:
+        raise ValueError(f"Algoritmo '{algorithm}' nao suportado.")
+    h = hashlib.new(algo)
+    h.update(text.encode("utf-8"))
+    return h.hexdigest()
+
 
 
