@@ -11,7 +11,7 @@ dev-toolbox/
 ├── src/
 │   ├── __init__.py
 │   ├── file_utils.py      # Operações resilientes de I/O em JSON e formatação de bytes
-│   ├── string_utils.py    # Slugify, case naming (snake/camel/pascal), máscara, IDs e UTC
+│   ├── string_utils.py    # Slugify, case naming (snake/camel/pascal), máscara, IDs, UTC e hashing
 │   └── validators.py      # Validação de CPF e CNPJ (módulo 11), e-mail e sanitização
 ├── tests/
 │   └── test_toolbox.py    # Suíte de testes unitários
@@ -84,6 +84,18 @@ python cli.py bytes 1048576
 
 python cli.py bytes 1536 -p 1
 # Saída: 1.5 KB
+```
+
+### 9. Gerar Hash Criptográfico
+```bash
+python cli.py hash "minha-string-secreta"
+# Saída: cbaeba1245dac8e86abd5c7d7afe4ec0864e7d7aa26ed7503b839f60d9f65144
+
+python cli.py hash "admin" --algo md5
+# Saída: 21232f297a57a5a743894a0e4a801fc3
+
+python cli.py hash "admin" -a sha1
+# Saída: d033e22ae348aeb5660fc2140aec35850c4da997
 ```
 
 ---
