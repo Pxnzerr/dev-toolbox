@@ -10,6 +10,7 @@ from src.string_utils import (
     slugify,
     snake_to_camel,
     truncate_words,
+    hash_text,
 )
 from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
 
@@ -88,6 +89,20 @@ class TestDevToolbox(unittest.TestCase):
         self.assertEqual(format_bytes(1073741824), "1.00 GB")
         with self.assertRaises(ValueError):
             format_bytes(-1)
+
+    def test_hash_text(self):
+        self.assertEqual(
+            hash_text("admin", "sha256"),
+            "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+        )
+        self.assertEqual(hash_text("admin", "md5"), "21232f297a57a5a743894a0e4a801fc3")
+        self.assertEqual(hash_text("admin", "sha1"), "d033e22ae348aeb5660fc2140aec35850c4da997")
+        self.assertEqual(
+            hash_text("", "sha256"),
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        )
+        with self.assertRaises(ValueError):
+            hash_text("teste", "invalido_algo")
 
 
 if __name__ == "__main__":
