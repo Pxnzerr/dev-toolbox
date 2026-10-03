@@ -3,6 +3,7 @@ from src.string_utils import (
     camel_to_snake,
     current_iso_utc,
     generate_id,
+    hash_text,
     mask_string,
     slugify,
     snake_to_camel,
@@ -59,6 +60,17 @@ def main() -> None:
     p_bytes.add_argument("size", type=int, help="Quantidade em bytes")
     p_bytes.add_argument("--precision", "-p", type=int, default=2, help="Casas decimais (padrao: 2)")
 
+    # hash
+    p_hash = subparsers.add_parser("hash", help="Gera hash criptografico de um texto (sha256, md5, sha1, sha512)")
+    p_hash.add_argument("text", help="Texto de entrada para calculo do hash")
+    p_hash.add_argument(
+        "--algo",
+        "-a",
+        default="sha256",
+        choices=["sha256", "md5", "sha1", "sha512"],
+        help="Algoritmo de hash (padrao: sha256)",
+    )
+
     args = parser.parse_args()
 
     if args.command == "slug":
@@ -93,6 +105,8 @@ def main() -> None:
             print(f"E-mail: {status}")
     elif args.command == "bytes":
         print(format_bytes(args.size, decimal_places=args.precision))
+    elif args.command == "hash":
+        print(hash_text(args.text, algorithm=args.algo))
     else:
         parser.print_help()
 
