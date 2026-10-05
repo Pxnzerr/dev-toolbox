@@ -3,16 +3,25 @@ import tempfile
 import unittest
 from src.file_utils import format_bytes, load_json, save_json
 from src.string_utils import (
+    base64_decode,
+    base64_encode,
     camel_to_snake,
     current_iso_utc,
     generate_id,
+    hash_text,
     mask_string,
     slugify,
     snake_to_camel,
     truncate_words,
-    hash_text,
 )
-from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
+from src.validators import (
+    is_valid_cnpj,
+    is_valid_cpf,
+    is_valid_email,
+    is_valid_ipv4,
+    is_valid_url,
+    only_digits,
+)
 
 
 class TestDevToolbox(unittest.TestCase):
@@ -32,7 +41,6 @@ class TestDevToolbox(unittest.TestCase):
         self.assertEqual(snake_to_camel("get_user_by_id"), "getUserById")
         self.assertEqual(snake_to_camel("user_profile_model", pascal=True), "UserProfileModel")
         self.assertEqual(snake_to_camel(""), "")
-
 
     def test_generate_id(self):
         uid = generate_id("prod")
@@ -64,6 +72,20 @@ class TestDevToolbox(unittest.TestCase):
         self.assertFalse(is_valid_cnpj("11.111.111/1111-11"))
         self.assertFalse(is_valid_cnpj("00.000.000/0001-00"))
 
+    def test_ipv4_validation(self):
+        self.assertTrue(is_valid_ipv4("192.168.0.1"))
+        self.assertTrue(is_valid_ipv4("127.0.0.1"))
+        self.assertTrue(is_valid_ipv4("8.8.8.8"))
+        self.assertFalse(is_valid_ipv4("256.1.2.3"))
+        self.assertFalse(is_valid_ipv4("192.168.1"))
+        self.assertFalse(is_valid_ipv4("invalid_ip"))
+
+    def test_url_validation(self):
+        self.assertTrue(is_valid_url("https://github.com/Pxnzerr/dev-toolbox"))
+        self.assertTrue(is_valid_url("http://localhost:8080/api/v1"))
+        self.assertFalse(is_valid_url("ftp://example.com"))
+        self.assertFalse(is_valid_url("www.example.com"))
+        self.assertFalse(is_valid_url("just-a-string"))
 
     def test_current_iso_utc(self):
         ts = current_iso_utc()
@@ -103,6 +125,15 @@ class TestDevToolbox(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             hash_text("teste", "invalido_algo")
+
+    def test_base64_encoding_and_decoding(self):
+        original = "Hello World! Olá Mundo 2026"
+        encoded = base64_encode(original)
+        self.assertEqual(base64_decode(encoded), original)
+        self.assertEqual(base64_encode("test"), "dGVzdA==")
+        self.assertEqual(base64_decode("dGVzdA=="), "test")
+        with self.assertRaises(ValueError):
+            base64_decode("!!!nao_base64_valido!!!")
 
 
 if __name__ == "__main__":
