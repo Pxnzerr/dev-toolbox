@@ -34,6 +34,9 @@ class TestDevToolbox(unittest.TestCase):
         text = "O rato roeu a roupa do rei"
         self.assertEqual(truncate_words(text, 3), "O rato roeu...")
         self.assertEqual(truncate_words(text, 10), text)
+        self.assertEqual(truncate_words(text, 0), "...")
+        long_text = "word " * 5000
+        self.assertEqual(truncate_words(long_text, 2), "word word...")
 
     def test_case_conversions(self):
         self.assertEqual(camel_to_snake("UserProfileModel"), "user_profile_model")

@@ -7,16 +7,32 @@ from datetime import datetime, timezone
 
 
 
+_SLUG_CLEAN_RE = re.compile(r"[^\w\s-]")
+_SLUG_HYPHEN_RE = re.compile(r"[-\s]+")
+_CAMEL_RE_1 = re.compile(r"(.)([A-Z][a-z]+)")
+_CAMEL_RE_2 = re.compile(r"([a-z0-9])([A-Z])")
+_HASH_CONSTRUCTORS = {
+    "sha256": hashlib.sha256,
+    "sha1": hashlib.sha1,
+    "md5": hashlib.md5,
+    "sha512": hashlib.sha512,
+    "sha224": hashlib.sha224,
+    "sha384": hashlib.sha384,
+}
+
+
 def slugify(text: str) -> str:
     """Converte uma string em um slug amigavel para URLs e nomes de arquivos."""
     normalized = unicodedata.normalize("NFKD", text)
-    cleaned = re.sub(r"[^\w\s-]", "", normalized).strip().lower()
-    return re.sub(r"[-\s]+", "-", cleaned)
+    cleaned = _SLUG_CLEAN_RE.sub("", normalized).strip().lower()
+    return _SLUG_HYPHEN_RE.sub("-", cleaned)
 
 
 def truncate_words(text: str, max_words: int, suffix: str = "...") -> str:
     """Trunca o texto pelo numero de palavras sem quebrar palavras ao meio."""
-    words = text.split()
+    if max_words <= 0:
+        return suffix
+    words = text.split(maxsplit=max_words)
     if len(words) <= max_words:
         return text
     return " ".join(words[:max_words]) + suffix
@@ -44,8 +60,8 @@ def mask_string(text: str, visible_start: int = 2, visible_end: int = 2, mask_ch
 
 def camel_to_snake(name: str) -> str:
     """Converte identificadores de CamelCase ou camelCase para snake_case."""
-    s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
-    return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+    s1 = _CAMEL_RE_1.sub(r"\1_\2", name)
+    return _CAMEL_RE_2.sub(r"\1_\2", s1).lower()
 
 
 def snake_to_camel(name: str, pascal: bool = False) -> str:
@@ -61,10 +77,14 @@ def snake_to_camel(name: str, pascal: bool = False) -> str:
 def hash_text(text: str, algorithm: str = "sha256") -> str:
     """Calcula o hash de um texto usando o algoritmo especificado (sha256, sha1, md5, sha512)."""
     algo = algorithm.lower().strip()
+    encoded = text.encode("utf-8")
+    constructor = _HASH_CONSTRUCTORS.get(algo)
+    if constructor is not None:
+        return constructor(encoded).hexdigest()
     if algo not in hashlib.algorithms_available:
         raise ValueError(f"Algoritmo '{algorithm}' nao suportado.")
     h = hashlib.new(algo)
-    h.update(text.encode("utf-8"))
+    h.update(encoded)
     return h.hexdigest()
 
 
