@@ -3,13 +3,16 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 
+_BYTE_UNITS = ("B", "KB", "MB", "GB", "TB", "PB")
+
+
 def load_json(filepath: str | Path, default: Optional[Dict[str, Any]] = None) -> Any:
     """Le e desserializa um arquivo JSON com seguranca."""
-    path = Path(filepath)
-    if not path.exists():
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
         return default
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def save_json(filepath: str | Path, data: Any, indent: int = 2) -> None:
@@ -24,10 +27,11 @@ def format_bytes(size: int | float, decimal_places: int = 2) -> str:
     """Formata um tamanho em bytes para uma representacao legivel (B, KB, MB, GB, TB, PB)."""
     if size < 0:
         raise ValueError("Tamanho em bytes nao pode ser negativo.")
-    units = ["B", "KB", "MB", "GB", "TB", "PB"]
+    if size < 1024:
+        return f"{int(size)} B"
     value = float(size)
-    for unit in units:
-        if value < 1024.0 or unit == units[-1]:
+    for unit in _BYTE_UNITS:
+        if value < 1024.0 or unit == "PB":
             if unit == "B":
                 return f"{int(value)} B"
             return f"{value:.{decimal_places}f} {unit}"
