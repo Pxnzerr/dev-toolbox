@@ -1,5 +1,7 @@
 import argparse
 from src.string_utils import (
+    base64_decode,
+    base64_encode,
     camel_to_snake,
     current_iso_utc,
     generate_id,
@@ -9,7 +11,14 @@ from src.string_utils import (
     snake_to_camel,
 )
 from src.file_utils import format_bytes
-from src.validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
+from src.validators import (
+    is_valid_cnpj,
+    is_valid_cpf,
+    is_valid_email,
+    is_valid_ipv4,
+    is_valid_url,
+    only_digits,
+)
 
 
 def main() -> None:
@@ -47,8 +56,8 @@ def main() -> None:
     )
 
     # validate
-    p_val = subparsers.add_parser("validate", help="Valida formatos comuns (cpf, email, cnpj)")
-    p_val.add_argument("type", choices=["cpf", "email", "cnpj"], help="Tipo de validacao")
+    p_val = subparsers.add_parser("validate", help="Valida formatos comuns (cpf, email, cnpj, ip, url)")
+    p_val.add_argument("type", choices=["cpf", "email", "cnpj", "ip", "url"], help="Tipo de validacao")
     p_val.add_argument("value", help="Valor a ser validado")
 
     # digits
@@ -69,6 +78,16 @@ def main() -> None:
         default="sha256",
         choices=["sha256", "md5", "sha1", "sha512"],
         help="Algoritmo de hash (padrao: sha256)",
+    )
+
+    # b64
+    p_b64 = subparsers.add_parser("b64", help="Codifica ou decodifica strings em Base64")
+    p_b64.add_argument("text", help="Texto de entrada")
+    p_b64.add_argument(
+        "--decode",
+        "-d",
+        action="store_true",
+        help="Decodifica string Base64 para texto original",
     )
 
     args = parser.parse_args()
@@ -103,14 +122,28 @@ def main() -> None:
             valid = is_valid_email(args.value)
             status = "Valido" if valid else "Invalido"
             print(f"E-mail: {status}")
+        elif args.type == "ip":
+            valid = is_valid_ipv4(args.value)
+            status = "Valido" if valid else "Invalido"
+            print(f"IPv4: {status}")
+        elif args.type == "url":
+            valid = is_valid_url(args.value)
+            status = "Valido" if valid else "Invalido"
+            print(f"URL: {status}")
     elif args.command == "bytes":
         print(format_bytes(args.size, decimal_places=args.precision))
     elif args.command == "hash":
         print(hash_text(args.text, algorithm=args.algo))
+    elif args.command == "b64":
+        if args.decode:
+            try:
+                print(base64_decode(args.text))
+            except ValueError as err:
+                print(f"Erro: {err}")
+        else:
+            print(base64_encode(args.text))
     else:
         parser.print_help()
-
-
 
 
 if __name__ == "__main__":
