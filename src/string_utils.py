@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import re
 import unicodedata
@@ -65,6 +66,19 @@ def hash_text(text: str, algorithm: str = "sha256") -> str:
     h = hashlib.new(algo)
     h.update(text.encode("utf-8"))
     return h.hexdigest()
+
+
+def base64_encode(text: str) -> str:
+    """Codifica uma string de texto em representacao Base64 UTF-8."""
+    return base64.b64encode(text.encode("utf-8")).decode("utf-8")
+
+
+def base64_decode(encoded_text: str) -> str:
+    """Decodifica uma string Base64 para texto UTF-8."""
+    try:
+        return base64.b64decode(encoded_text.encode("utf-8"), validate=True).decode("utf-8")
+    except Exception as exc:
+        raise ValueError(f"Conteudo Base64 invalido: {exc}") from exc
 
 
 
