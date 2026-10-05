@@ -1,4 +1,6 @@
+import ipaddress
 import re
+from urllib.parse import urlparse
 
 
 def only_digits(value: str) -> str:
@@ -48,4 +50,22 @@ def is_valid_cnpj(cnpj: str) -> bool:
     rest2 = sum2 % 11
     d2 = 0 if rest2 < 2 else 11 - rest2
     return d2 == int(digits[13])
+
+
+def is_valid_ipv4(ip: str) -> bool:
+    """Valida se uma string e um endereco IPv4 valido."""
+    try:
+        ipaddress.IPv4Address(ip.strip())
+        return True
+    except (ipaddress.AddressValueError, ValueError):
+        return False
+
+
+def is_valid_url(url: str) -> bool:
+    """Valida se uma string e uma URL valida com esquema http ou https."""
+    try:
+        parsed = urlparse(url.strip())
+        return bool(parsed.scheme in ("http", "https") and parsed.netloc)
+    except Exception:
+        return False
 

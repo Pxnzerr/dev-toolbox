@@ -12,7 +12,14 @@ from .string_utils import (
     snake_to_camel,
     truncate_words,
 )
-from .validators import is_valid_cnpj, is_valid_cpf, is_valid_email, only_digits
+from .validators import (
+    is_valid_cnpj,
+    is_valid_cpf,
+    is_valid_email,
+    is_valid_ipv4,
+    is_valid_url,
+    only_digits,
+)
 from .file_utils import format_bytes, load_json, save_json
 
 __all__ = [
@@ -30,6 +37,8 @@ __all__ = [
     "is_valid_cpf",
     "is_valid_cnpj",
     "is_valid_email",
+    "is_valid_ipv4",
+    "is_valid_url",
     "load_json",
     "save_json",
     "format_bytes",
