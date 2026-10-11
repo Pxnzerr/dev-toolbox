@@ -19,6 +19,7 @@ from src.validators import (
     is_valid_cpf,
     is_valid_email,
     is_valid_ipv4,
+    is_valid_ipv6,
     is_valid_url,
     only_digits,
 )
@@ -82,6 +83,14 @@ class TestDevToolbox(unittest.TestCase):
         self.assertFalse(is_valid_ipv4("256.1.2.3"))
         self.assertFalse(is_valid_ipv4("192.168.1"))
         self.assertFalse(is_valid_ipv4("invalid_ip"))
+
+    def test_ipv6_validation(self):
+        self.assertTrue(is_valid_ipv6("::1"))
+        self.assertTrue(is_valid_ipv6("2001:0db8:85a3:0000:0000:8a2e:0370:7334"))
+        self.assertTrue(is_valid_ipv6("fe80::1"))
+        self.assertFalse(is_valid_ipv6("192.168.0.1"))
+        self.assertFalse(is_valid_ipv6("2001:::1"))
+        self.assertFalse(is_valid_ipv6("invalid_ipv6"))
 
     def test_url_validation(self):
         self.assertTrue(is_valid_url("https://github.com/Pxnzerr/dev-toolbox"))

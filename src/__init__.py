@@ -17,6 +17,7 @@ from .validators import (
     is_valid_cpf,
     is_valid_email,
     is_valid_ipv4,
+    is_valid_ipv6,
     is_valid_url,
     only_digits,
 )
@@ -38,6 +39,7 @@ __all__ = [
     "is_valid_cnpj",
     "is_valid_email",
     "is_valid_ipv4",
+    "is_valid_ipv6",
     "is_valid_url",
     "load_json",
     "save_json",

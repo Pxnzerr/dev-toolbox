@@ -12,7 +12,7 @@ dev-toolbox/
 │   ├── __init__.py
 │   ├── file_utils.py      # Operações resilientes de I/O em JSON e formatação de bytes
 │   ├── string_utils.py    # Slugify, case naming, máscara, IDs, UTC, hashing e Base64
-│   └── validators.py      # Validação de CPF, CNPJ, e-mail, IPv4, URLs e sanitização
+│   └── validators.py      # Validação de CPF, CNPJ, e-mail, IPv4, IPv6, URLs e sanitização
 ├── tests/
 │   └── test_toolbox.py    # Suíte de testes unitários
 ├── cli.py                 # Interface interativa de linha de comando
@@ -56,7 +56,7 @@ python cli.py mask "4532112233445566" --start 4 --end 4
 # Saída: 4532********5566
 ```
 
-### 6. Validar formato (CPF, CNPJ, E-mail, IPv4, URL)
+### 6. Validar formato (CPF, CNPJ, E-mail, IPv4, IPv6, URL)
 ```bash
 python cli.py validate email "contato@empresa.com"
 # Saída: E-mail: Valido
@@ -66,6 +66,9 @@ python cli.py validate cnpj "00.000.000/0001-91"
 
 python cli.py validate ip "192.168.1.1"
 # Saída: IPv4: Valido
+
+python cli.py validate ipv6 "2001:db8::1"
+# Saída: IPv6: Valido
 
 python cli.py validate url "https://github.com/Pxnzerr"
 # Saída: URL: Valido

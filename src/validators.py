@@ -68,6 +68,15 @@ def is_valid_ipv4(ip: str) -> bool:
         return False
 
 
+def is_valid_ipv6(ip: str) -> bool:
+    """Valida se uma string e um endereco IPv6 valido."""
+    try:
+        ipaddress.IPv6Address(ip.strip())
+        return True
+    except (ipaddress.AddressValueError, ValueError):
+        return False
+
+
 def is_valid_url(url: str) -> bool:
     """Valida se uma string e uma URL valida com esquema http ou https."""
     try:
