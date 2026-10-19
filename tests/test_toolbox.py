@@ -10,6 +10,7 @@ from src.string_utils import (
     generate_id,
     hash_text,
     mask_string,
+    remove_accents,
     slugify,
     snake_to_camel,
     truncate_words,
@@ -27,6 +28,12 @@ from src.validators import (
 
 
 class TestDevToolbox(unittest.TestCase):
+
+    def test_remove_accents(self):
+        self.assertEqual(remove_accents("Olá Mundo, você está bem?"), "Ola Mundo, voce esta bem?")
+        self.assertEqual(remove_accents("Ações, Café & Pão!"), "Acoes, Cafe & Pao!")
+        self.assertEqual(remove_accents(""), "")
+        self.assertEqual(remove_accents("Texto sem acento"), "Texto sem acento")
 
     def test_slugify(self):
         self.assertEqual(slugify("Olá Mundo! 2026"), "ola-mundo-2026")

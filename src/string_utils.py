@@ -21,6 +21,14 @@ _HASH_CONSTRUCTORS = {
 }
 
 
+def remove_accents(text: str) -> str:
+    """Remove acentos e caracteres diacriticos de uma string mantendo a estrutura original."""
+    if not text:
+        return ""
+    normalized = unicodedata.normalize("NFKD", text)
+    return "".join(c for c in normalized if not unicodedata.combining(c))
+
+
 def slugify(text: str) -> str:
     """Converte uma string em um slug amigavel para URLs e nomes de arquivos."""
     normalized = unicodedata.normalize("NFKD", text)

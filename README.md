@@ -32,7 +32,13 @@ python cli.py slug "Meu Novo Artigo & Projeto 2026!"
 # Saída: meu-novo-artigo-projeto-2026
 ```
 
-### 2. Gerar ID curto com prefixo
+### 2. Remover Acentos
+```bash
+python cli.py unaccent "Olá Mundo, você está bem?"
+# Saída: Ola Mundo, voce esta bem?
+```
+
+### 3. Gerar ID curto com prefixo
 ```bash
 python cli.py id -p order
 # Saída: order_a1b2c3d4e5f6

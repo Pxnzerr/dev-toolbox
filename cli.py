@@ -7,6 +7,7 @@ from src.string_utils import (
     generate_id,
     hash_text,
     mask_string,
+    remove_accents,
     slugify,
     snake_to_camel,
 )
@@ -32,6 +33,10 @@ def main() -> None:
     # slug
     p_slug = subparsers.add_parser("slug", help="Converte texto em slug amigavel para URLs")
     p_slug.add_argument("text", help="Texto de entrada")
+
+    # unaccent
+    p_unaccent = subparsers.add_parser("unaccent", help="Remove acentos e caracteres diacriticos de um texto")
+    p_unaccent.add_argument("text", help="Texto de entrada com acentos")
 
     # gen-id
     p_id = subparsers.add_parser("id", help="Gera um ID curto unico")
@@ -96,6 +101,8 @@ def main() -> None:
 
     if args.command == "slug":
         print(slugify(args.text))
+    elif args.command == "unaccent":
+        print(remove_accents(args.text))
     elif args.command == "id":
         print(generate_id(args.prefix))
     elif args.command == "now":

@@ -8,6 +8,7 @@ from .string_utils import (
     generate_id,
     hash_text,
     mask_string,
+    remove_accents,
     slugify,
     snake_to_camel,
     truncate_words,
@@ -25,6 +26,7 @@ from .validators import (
 from .file_utils import format_bytes, load_json, save_json
 
 __all__ = [
+    "remove_accents",
     "slugify",
     "truncate_words",
     "generate_id",
