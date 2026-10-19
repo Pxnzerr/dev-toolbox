@@ -23,7 +23,7 @@ from .validators import (
     is_valid_uuid,
     only_digits,
 )
-from .file_utils import format_bytes, load_json, save_json
+from .file_utils import format_bytes, get_file_checksum, load_json, save_json
 
 __all__ = [
     "remove_accents",
@@ -48,6 +48,7 @@ __all__ = [
     "load_json",
     "save_json",
     "format_bytes",
+    "get_file_checksum",
 ]
 
 

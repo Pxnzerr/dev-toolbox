@@ -127,6 +127,12 @@ python cli.py b64 "RGV2IFRvb2xib3g=" --decode
 # Saída: Dev Toolbox
 ```
 
+### 11. Calcular Hash / Checksum de Arquivo
+```bash
+python cli.py checksum "caminho/do/arquivo.zip" --algo sha256
+# Saída: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+```
+
 ---
 
 ## 🧪 Rodando os Testes

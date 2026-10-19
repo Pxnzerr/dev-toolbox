@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -37,4 +38,23 @@ def format_bytes(size: int | float, decimal_places: int = 2) -> str:
             return f"{value:.{decimal_places}f} {unit}"
         value /= 1024.0
     return f"{value:.{decimal_places}f} PB"
+
+
+def get_file_checksum(filepath: str | Path, algorithm: str = "sha256", chunk_size: int = 65536) -> str:
+    """Calcula o checksum criptografico de um arquivo em disco lendo em blocos eficientes de memoria."""
+    algo = algorithm.lower().strip()
+    try:
+        hasher = hashlib.new(algo)
+    except ValueError as exc:
+        raise ValueError(f"Algoritmo de hash '{algorithm}' nao suportado.") from exc
+
+    path = Path(filepath)
+    if not path.is_file():
+        raise FileNotFoundError(f"Arquivo '{filepath}' nao encontrado.")
+
+    with open(path, "rb") as f:
+        while chunk := f.read(chunk_size):
+            hasher.update(chunk)
+
+    return hasher.hexdigest()
 

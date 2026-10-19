@@ -11,7 +11,7 @@ from src.string_utils import (
     slugify,
     snake_to_camel,
 )
-from src.file_utils import format_bytes
+from src.file_utils import format_bytes, get_file_checksum
 from src.validators import (
     is_valid_cnpj,
     is_valid_cpf,
@@ -87,6 +87,17 @@ def main() -> None:
         help="Algoritmo de hash (padrao: sha256)",
     )
 
+    # checksum
+    p_chk = subparsers.add_parser("checksum", help="Calcula o hash/checksum de um arquivo em disco")
+    p_chk.add_argument("filepath", help="Caminho do arquivo")
+    p_chk.add_argument(
+        "--algo",
+        "-a",
+        default="sha256",
+        choices=["sha256", "md5", "sha1", "sha512"],
+        help="Algoritmo de hash (padrao: sha256)",
+    )
+
     # b64
     p_b64 = subparsers.add_parser("b64", help="Codifica ou decodifica strings em Base64")
     p_b64.add_argument("text", help="Texto de entrada")
@@ -151,6 +162,11 @@ def main() -> None:
         print(format_bytes(args.size, decimal_places=args.precision))
     elif args.command == "hash":
         print(hash_text(args.text, algorithm=args.algo))
+    elif args.command == "checksum":
+        try:
+            print(get_file_checksum(args.filepath, algorithm=args.algo))
+        except (FileNotFoundError, ValueError) as err:
+            print(f"Erro: {err}")
     elif args.command == "b64":
         if args.decode:
             try:

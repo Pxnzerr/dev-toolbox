@@ -1,7 +1,7 @@
 import os
 import tempfile
 import unittest
-from src.file_utils import format_bytes, load_json, save_json
+from src.file_utils import format_bytes, get_file_checksum, load_json, save_json
 from src.string_utils import (
     base64_decode,
     base64_encode,
@@ -143,6 +143,26 @@ class TestDevToolbox(unittest.TestCase):
         self.assertEqual(format_bytes(1073741824), "1.00 GB")
         with self.assertRaises(ValueError):
             format_bytes(-1)
+
+    def test_get_file_checksum(self):
+        with tempfile.NamedTemporaryFile("w+", delete=False, encoding="utf-8") as tmp:
+            tmp.write("dev-toolbox-checksum-test")
+            tmp_path = tmp.name
+        try:
+            sha256_hash = get_file_checksum(tmp_path, "sha256")
+            self.assertEqual(
+                sha256_hash,
+                "18cf8cdb15d74a0505c6523d8aba2389da9419b400edc3a7f50710f84e15870f",
+            )
+            md5_hash = get_file_checksum(tmp_path, "md5")
+            self.assertEqual(md5_hash, "f9db629208333f57c873a3779aee5ea0")
+            with self.assertRaises(FileNotFoundError):
+                get_file_checksum("arquivo_inexistente_123.bin")
+            with self.assertRaises(ValueError):
+                get_file_checksum(tmp_path, "algoritmo_invalido")
+        finally:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
     def test_hash_text(self):
         self.assertEqual(
