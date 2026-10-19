@@ -60,12 +60,18 @@ def mask_string(text: str, visible_start: int = 2, visible_end: int = 2, mask_ch
 
 def camel_to_snake(name: str) -> str:
     """Converte identificadores de CamelCase ou camelCase para snake_case."""
+    if not name or name.islower():
+        return name
     s1 = _CAMEL_RE_1.sub(r"\1_\2", name)
     return _CAMEL_RE_2.sub(r"\1_\2", s1).lower()
 
 
 def snake_to_camel(name: str, pascal: bool = False) -> str:
     """Converte identificadores de snake_case para camelCase ou PascalCase."""
+    if not name:
+        return ""
+    if "_" not in name:
+        return name.capitalize() if pascal else (name[:1].lower() + name[1:])
     components = [c for c in name.split("_") if c]
     if not components:
         return ""
