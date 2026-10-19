@@ -21,6 +21,7 @@ from src.validators import (
     is_valid_ipv4,
     is_valid_ipv6,
     is_valid_url,
+    is_valid_uuid,
     only_digits,
 )
 
@@ -98,6 +99,18 @@ class TestDevToolbox(unittest.TestCase):
         self.assertFalse(is_valid_url("ftp://example.com"))
         self.assertFalse(is_valid_url("www.example.com"))
         self.assertFalse(is_valid_url("just-a-string"))
+
+    def test_uuid_validation(self):
+        valid_v4 = "c9a646d3-9c61-4cd9-bc19-470277872fa1"
+        self.assertTrue(is_valid_uuid(valid_v4))
+        self.assertTrue(is_valid_uuid(valid_v4, version=4))
+        self.assertFalse(is_valid_uuid(valid_v4, version=1))
+        # Sem hifens
+        self.assertTrue(is_valid_uuid("c9a646d39c614cd9bc19470277872fa1"))
+        # Invalidos
+        self.assertFalse(is_valid_uuid("not-a-uuid"))
+        self.assertFalse(is_valid_uuid(""))
+        self.assertFalse(is_valid_uuid("c9a646d3-9c61-4cd9-bc19-470277872faZ"))
 
     def test_current_iso_utc(self):
         ts = current_iso_utc()

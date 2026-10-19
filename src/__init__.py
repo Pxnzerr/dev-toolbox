@@ -19,6 +19,7 @@ from .validators import (
     is_valid_ipv4,
     is_valid_ipv6,
     is_valid_url,
+    is_valid_uuid,
     only_digits,
 )
 from .file_utils import format_bytes, load_json, save_json
@@ -41,6 +42,7 @@ __all__ = [
     "is_valid_ipv4",
     "is_valid_ipv6",
     "is_valid_url",
+    "is_valid_uuid",
     "load_json",
     "save_json",
     "format_bytes",

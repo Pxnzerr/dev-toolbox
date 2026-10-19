@@ -56,7 +56,7 @@ python cli.py mask "4532112233445566" --start 4 --end 4
 # Saída: 4532********5566
 ```
 
-### 6. Validar formato (CPF, CNPJ, E-mail, IPv4, IPv6, URL)
+### 6. Validar formato (CPF, CNPJ, E-mail, IPv4, IPv6, URL, UUID)
 ```bash
 python cli.py validate email "contato@empresa.com"
 # Saída: E-mail: Valido
@@ -72,6 +72,9 @@ python cli.py validate ipv6 "2001:db8::1"
 
 python cli.py validate url "https://github.com/Pxnzerr"
 # Saída: URL: Valido
+
+python cli.py validate uuid "c9a646d3-9c61-4cd9-bc19-470277872fa1"
+# Saída: UUID: Valido
 ```
 
 ### 7. Conversão de Nomenclatura (Case)

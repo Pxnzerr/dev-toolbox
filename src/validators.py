@@ -1,5 +1,7 @@
 import ipaddress
 import re
+import uuid
+from typing import Optional
 from urllib.parse import urlparse
 
 
@@ -133,5 +135,16 @@ def is_valid_url(url: str) -> bool:
         parsed = urlparse(url.strip())
         return bool(parsed.scheme in ("http", "https") and parsed.netloc)
     except Exception:
+        return False
+
+
+def is_valid_uuid(uuid_to_test: str, version: Optional[int] = None) -> bool:
+    """Valida se uma string e um UUID valido, com verificacao opcional de versao."""
+    try:
+        val = uuid.UUID(str(uuid_to_test).strip())
+        if version is not None:
+            return val.version == version
+        return True
+    except (ValueError, AttributeError):
         return False
 
