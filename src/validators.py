@@ -11,6 +11,8 @@ _CNPJ_WEIGHTS_2 = (6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
 
 def only_digits(value: str) -> str:
     """Remove todos os caracteres nao numericos de uma string."""
+    if value.isdigit():
+        return value
     return _NON_DIGITS_RE.sub("", value)
 
 
@@ -22,14 +24,35 @@ def is_valid_cpf(cpf: str) -> bool:
 
     nums = [ord(c) - 48 for c in digits]
 
-    # Primeiro digito verificador
-    sum1 = sum(nums[i] * (10 - i) for i in range(9))
+    # Primeiro digito verificador (calculo aritmetico direto sem gerador)
+    sum1 = (
+        nums[0] * 10
+        + nums[1] * 9
+        + nums[2] * 8
+        + nums[3] * 7
+        + nums[4] * 6
+        + nums[5] * 5
+        + nums[6] * 4
+        + nums[7] * 3
+        + nums[8] * 2
+    )
     d1 = (sum1 * 10 % 11) % 10
     if d1 != nums[9]:
         return False
 
     # Segundo digito verificador
-    sum2 = sum(nums[i] * (11 - i) for i in range(10))
+    sum2 = (
+        nums[0] * 11
+        + nums[1] * 10
+        + nums[2] * 9
+        + nums[3] * 8
+        + nums[4] * 7
+        + nums[5] * 6
+        + nums[6] * 5
+        + nums[7] * 4
+        + nums[8] * 3
+        + nums[9] * 2
+    )
     d2 = (sum2 * 10 % 11) % 10
     return d2 == nums[10]
 
@@ -47,13 +70,40 @@ def is_valid_cnpj(cnpj: str) -> bool:
 
     nums = [ord(c) - 48 for c in digits]
 
-    sum1 = sum(nums[i] * _CNPJ_WEIGHTS_1[i] for i in range(12))
+    sum1 = (
+        nums[0] * 5
+        + nums[1] * 4
+        + nums[2] * 3
+        + nums[3] * 2
+        + nums[4] * 9
+        + nums[5] * 8
+        + nums[6] * 7
+        + nums[7] * 6
+        + nums[8] * 5
+        + nums[9] * 4
+        + nums[10] * 3
+        + nums[11] * 2
+    )
     rest1 = sum1 % 11
     d1 = 0 if rest1 < 2 else 11 - rest1
     if d1 != nums[12]:
         return False
 
-    sum2 = sum(nums[i] * _CNPJ_WEIGHTS_2[i] for i in range(13))
+    sum2 = (
+        nums[0] * 6
+        + nums[1] * 5
+        + nums[2] * 4
+        + nums[3] * 3
+        + nums[4] * 2
+        + nums[5] * 9
+        + nums[6] * 8
+        + nums[7] * 7
+        + nums[8] * 6
+        + nums[9] * 5
+        + nums[10] * 4
+        + nums[11] * 3
+        + nums[12] * 2
+    )
     rest2 = sum2 % 11
     d2 = 0 if rest2 < 2 else 11 - rest2
     return d2 == nums[13]
