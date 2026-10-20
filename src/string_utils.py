@@ -159,4 +159,33 @@ def base64_decode(encoded_text: str) -> str:
         raise ValueError(f"Conteudo Base64 invalido: {exc}") from exc
 
 
+def text_statistics(text: str) -> dict[str, int | float]:
+    """Calcula estatisticas e metricas detalhadas de um texto."""
+    if not text:
+        return {
+            "characters": 0,
+            "characters_no_spaces": 0,
+            "words": 0,
+            "lines": 0,
+            "reading_time_seconds": 0.0,
+            "average_word_length": 0.0,
+        }
+
+    words = text.split()
+    word_count = len(words)
+    lines = text.count("\n") + 1 if text else 0
+    chars_no_spaces = sum(len(w) for w in words)
+    avg_word_len = round(chars_no_spaces / word_count, 2) if word_count > 0 else 0.0
+    reading_seconds = round((word_count / 200.0) * 60.0, 1)
+
+    return {
+        "characters": len(text),
+        "characters_no_spaces": chars_no_spaces,
+        "words": word_count,
+        "lines": lines,
+        "reading_time_seconds": reading_seconds,
+        "average_word_length": avg_word_len,
+    }
+
+
 

@@ -12,6 +12,7 @@ from .string_utils import (
     remove_accents,
     slugify,
     snake_to_camel,
+    text_statistics,
     truncate_words,
 )
 from .validators import (
@@ -30,6 +31,7 @@ __all__ = [
     "remove_accents",
     "slugify",
     "truncate_words",
+    "text_statistics",
     "generate_id",
     "generate_password",
     "current_iso_utc",

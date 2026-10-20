@@ -14,6 +14,7 @@ from src.string_utils import (
     remove_accents,
     slugify,
     snake_to_camel,
+    text_statistics,
     truncate_words,
 )
 from src.validators import (
@@ -29,6 +30,22 @@ from src.validators import (
 
 
 class TestDevToolbox(unittest.TestCase):
+
+    def test_text_statistics(self):
+        empty = text_statistics("")
+        self.assertEqual(empty["characters"], 0)
+        self.assertEqual(empty["words"], 0)
+        self.assertEqual(empty["lines"], 0)
+        self.assertEqual(empty["reading_time_seconds"], 0.0)
+
+        sample = "Python e incrivel.\nSimples e direto."
+        stats = text_statistics(sample)
+        self.assertEqual(stats["characters"], len(sample))
+        self.assertEqual(stats["words"], 6)
+        self.assertEqual(stats["lines"], 2)
+        self.assertEqual(stats["characters_no_spaces"], len("Pythoneincrivel.Simplesedireto."))
+        self.assertGreater(stats["average_word_length"], 0)
+        self.assertGreater(stats["reading_time_seconds"], 0)
 
     def test_remove_accents(self):
         self.assertEqual(remove_accents("Olá Mundo, você está bem?"), "Ola Mundo, voce esta bem?")

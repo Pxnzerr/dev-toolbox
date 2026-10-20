@@ -11,6 +11,7 @@ from src.string_utils import (
     remove_accents,
     slugify,
     snake_to_camel,
+    text_statistics,
 )
 from src.file_utils import format_bytes, get_file_checksum
 from src.validators import (
@@ -38,6 +39,10 @@ def main() -> None:
     # unaccent
     p_unaccent = subparsers.add_parser("unaccent", help="Remove acentos e caracteres diacriticos de um texto")
     p_unaccent.add_argument("text", help="Texto de entrada com acentos")
+
+    # stats
+    p_stats = subparsers.add_parser("stats", help="Analisa metricas e estatisticas de um texto (palavras, linhas, leitura)")
+    p_stats.add_argument("text", help="Texto a ser analisado")
 
     # gen-id
     p_id = subparsers.add_parser("id", help="Gera um ID curto unico")
@@ -123,6 +128,15 @@ def main() -> None:
         print(slugify(args.text))
     elif args.command == "unaccent":
         print(remove_accents(args.text))
+    elif args.command == "stats":
+        metrics = text_statistics(args.text)
+        print("Estatisticas do Texto:")
+        print(f"  Caracteres (total):       {metrics['characters']}")
+        print(f"  Caracteres (sem espacos): {metrics['characters_no_spaces']}")
+        print(f"  Palavras:                 {metrics['words']}")
+        print(f"  Linhas:                   {metrics['lines']}")
+        print(f"  Tamanho medio de palavra: {metrics['average_word_length']} chars")
+        print(f"  Tempo estimado de leitura: {metrics['reading_time_seconds']}s")
     elif args.command == "id":
         print(generate_id(args.prefix))
     elif args.command == "password":
