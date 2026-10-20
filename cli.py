@@ -5,6 +5,7 @@ from src.string_utils import (
     camel_to_snake,
     current_iso_utc,
     generate_id,
+    generate_password,
     hash_text,
     mask_string,
     remove_accents,
@@ -41,6 +42,14 @@ def main() -> None:
     # gen-id
     p_id = subparsers.add_parser("id", help="Gera um ID curto unico")
     p_id.add_argument("--prefix", "-p", default="", help="Prefixo opcional do ID")
+
+    # password
+    p_pass = subparsers.add_parser("password", help="Gera uma senha criptograficamente segura")
+    p_pass.add_argument("--length", "-l", type=int, default=16, help="Comprimento da senha (padrao: 16)")
+    p_pass.add_argument("--no-upper", action="store_true", help="Nao incluir letras maiusculas")
+    p_pass.add_argument("--no-digits", action="store_true", help="Nao incluir numeros")
+    p_pass.add_argument("--no-symbols", action="store_true", help="Nao incluir simbolos especiais")
+    p_pass.add_argument("--clean", action="store_true", help="Excluir caracteres ambiguos (il1Lo0O|)")
 
     # now
     subparsers.add_parser("now", help="Exibe o timestamp UTC atual em ISO 8601")
@@ -116,6 +125,18 @@ def main() -> None:
         print(remove_accents(args.text))
     elif args.command == "id":
         print(generate_id(args.prefix))
+    elif args.command == "password":
+        try:
+            pwd = generate_password(
+                length=args.length,
+                use_uppercase=not args.no_upper,
+                use_digits=not args.no_digits,
+                use_symbols=not args.no_symbols,
+                exclude_ambiguous=args.clean,
+            )
+            print(pwd)
+        except ValueError as err:
+            print(f"Erro: {err}")
     elif args.command == "now":
         print(current_iso_utc())
     elif args.command == "mask":

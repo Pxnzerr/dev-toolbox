@@ -44,7 +44,16 @@ python cli.py id -p order
 # Saída: order_a1b2c3d4e5f6
 ```
 
-### 3. Timestamp UTC atual
+### 4. Gerar Senha Segura
+```bash
+python cli.py password --length 20
+# Saída: xK8#mQ2$pL9@vR4!wT7&
+
+python cli.py password -l 16 --no-symbols --clean
+# Saída: 2k7H9mP4wR8xN3bE
+```
+
+### 5. Timestamp UTC atual
 ```bash
 python cli.py now
 # Saída: 2026-09-04T13:05:46.123456+00:00

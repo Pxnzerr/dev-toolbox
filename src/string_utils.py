@@ -1,6 +1,8 @@
 import base64
 import hashlib
 import re
+import secrets
+import string
 import unicodedata
 import uuid
 from datetime import datetime, timezone
@@ -50,6 +52,48 @@ def generate_id(prefix: str = "") -> str:
     """Gera um identificador unico curto baseado em UUID4."""
     short_uuid = uuid.uuid4().hex[:12]
     return f"{prefix}_{short_uuid}" if prefix else short_uuid
+
+
+def generate_password(
+    length: int = 16,
+    use_uppercase: bool = True,
+    use_digits: bool = True,
+    use_symbols: bool = True,
+    exclude_ambiguous: bool = False,
+) -> str:
+    """Gera uma senha criptograficamente segura com configuracoes customizaveis."""
+    if length < 4:
+        raise ValueError("O comprimento minimo da senha deve ser de pelo menos 4 caracteres.")
+
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase if use_uppercase else ""
+    digits = string.digits if use_digits else ""
+    symbols = "!@#$%^&*()-_=+[]{}<>?" if use_symbols else ""
+
+    if exclude_ambiguous:
+        ambiguous = "il1Lo0O|"
+        lower = "".join(c for c in lower if c not in ambiguous)
+        upper = "".join(c for c in upper if c not in ambiguous)
+        digits = "".join(c for c in digits if c not in ambiguous)
+        symbols = "".join(c for c in symbols if c not in ambiguous)
+
+    all_chars = lower + upper + digits + symbols
+    if not all_chars:
+        raise ValueError("Ao menos um conjunto de caracteres deve ser selecionado.")
+
+    password_chars = [secrets.choice(lower)]
+    if upper:
+        password_chars.append(secrets.choice(upper))
+    if digits:
+        password_chars.append(secrets.choice(digits))
+    if symbols:
+        password_chars.append(secrets.choice(symbols))
+
+    remaining = length - len(password_chars)
+    password_chars.extend(secrets.choice(all_chars) for _ in range(remaining))
+
+    secrets.SystemRandom().shuffle(password_chars)
+    return "".join(password_chars)
 
 
 def current_iso_utc() -> str:

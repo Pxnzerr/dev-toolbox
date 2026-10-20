@@ -8,6 +8,7 @@ from src.string_utils import (
     camel_to_snake,
     current_iso_utc,
     generate_id,
+    generate_password,
     hash_text,
     mask_string,
     remove_accents,
@@ -58,6 +59,25 @@ class TestDevToolbox(unittest.TestCase):
         uid = generate_id("prod")
         self.assertTrue(uid.startswith("prod_"))
         self.assertEqual(len(uid), 5 + 12)
+
+    def test_generate_password(self):
+        pwd = generate_password(length=20)
+        self.assertEqual(len(pwd), 20)
+        self.assertTrue(any(c.islower() for c in pwd))
+        self.assertTrue(any(c.isupper() for c in pwd))
+        self.assertTrue(any(c.isdigit() for c in pwd))
+
+        pwd_simple = generate_password(length=12, use_uppercase=False, use_symbols=False)
+        self.assertEqual(len(pwd_simple), 12)
+        self.assertTrue(pwd_simple.isalnum())
+        self.assertFalse(any(c.isupper() for c in pwd_simple))
+
+        pwd_clean = generate_password(length=30, exclude_ambiguous=True)
+        for amb in "il1Lo0O|":
+            self.assertNotIn(amb, pwd_clean)
+
+        with self.assertRaises(ValueError):
+            generate_password(length=3)
 
     def test_mask_string(self):
         self.assertEqual(mask_string("1234567890", 2, 2), "12******90")
