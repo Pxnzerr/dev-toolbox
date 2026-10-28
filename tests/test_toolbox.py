@@ -23,6 +23,7 @@ from src.validators import (
     is_valid_email,
     is_valid_ipv4,
     is_valid_ipv6,
+    is_valid_mac_address,
     is_valid_url,
     is_valid_uuid,
     only_digits,
@@ -136,6 +137,19 @@ class TestDevToolbox(unittest.TestCase):
         self.assertFalse(is_valid_ipv6("192.168.0.1"))
         self.assertFalse(is_valid_ipv6("2001:::1"))
         self.assertFalse(is_valid_ipv6("invalid_ipv6"))
+
+    def test_mac_address_validation(self):
+        self.assertTrue(is_valid_mac_address("00:1A:2B:3C:4D:5E"))
+        self.assertTrue(is_valid_mac_address("00-1a-2b-3c-4d-5e"))
+        self.assertTrue(is_valid_mac_address("001a.2b3c.4d5e"))
+        self.assertTrue(is_valid_mac_address("  AA:BB:CC:DD:EE:FF  "))
+
+        self.assertFalse(is_valid_mac_address("00:1A:2B:3C:4D:5"))
+        self.assertFalse(is_valid_mac_address("00:1A:2B:3C:4D:5E:6F"))
+        self.assertFalse(is_valid_mac_address("00:1G:2B:3C:4D:5E"))
+        self.assertFalse(is_valid_mac_address("00:1A-2B:3C-4D:5E"))
+        self.assertFalse(is_valid_mac_address("invalid_mac"))
+        self.assertFalse(is_valid_mac_address(""))
 
     def test_url_validation(self):
         self.assertTrue(is_valid_url("https://github.com/Pxnzerr/dev-toolbox"))

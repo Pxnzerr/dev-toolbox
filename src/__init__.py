@@ -21,6 +21,7 @@ from .validators import (
     is_valid_email,
     is_valid_ipv4,
     is_valid_ipv6,
+    is_valid_mac_address,
     is_valid_url,
     is_valid_uuid,
     only_digits,
@@ -47,6 +48,7 @@ __all__ = [
     "is_valid_email",
     "is_valid_ipv4",
     "is_valid_ipv6",
+    "is_valid_mac_address",
     "is_valid_url",
     "is_valid_uuid",
     "load_json",
@@ -54,6 +56,3 @@ __all__ = [
     "format_bytes",
     "get_file_checksum",
 ]
-
-
-

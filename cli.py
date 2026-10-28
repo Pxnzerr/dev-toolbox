@@ -20,6 +20,7 @@ from src.validators import (
     is_valid_email,
     is_valid_ipv4,
     is_valid_ipv6,
+    is_valid_mac_address,
     is_valid_url,
     is_valid_uuid,
     only_digits,
@@ -77,8 +78,8 @@ def main() -> None:
     )
 
     # validate
-    p_val = subparsers.add_parser("validate", help="Valida formatos comuns (cpf, email, cnpj, ip, ipv6, url, uuid)")
-    p_val.add_argument("type", choices=["cpf", "email", "cnpj", "ip", "ipv6", "url", "uuid"], help="Tipo de validacao")
+    p_val = subparsers.add_parser("validate", help="Valida formatos comuns (cpf, email, cnpj, ip, ipv6, mac, url, uuid)")
+    p_val.add_argument("type", choices=["cpf", "email", "cnpj", "ip", "ipv6", "mac", "url", "uuid"], help="Tipo de validacao")
     p_val.add_argument("value", help="Valor a ser validado")
 
     # digits
@@ -185,6 +186,10 @@ def main() -> None:
             valid = is_valid_ipv6(args.value)
             status = "Valido" if valid else "Invalido"
             print(f"IPv6: {status}")
+        elif args.type == "mac":
+            valid = is_valid_mac_address(args.value)
+            status = "Valido" if valid else "Invalido"
+            print(f"MAC: {status}")
         elif args.type == "url":
             valid = is_valid_url(args.value)
             status = "Valido" if valid else "Invalido"

@@ -7,6 +7,9 @@ from urllib.parse import urlparse
 
 _NON_DIGITS_RE = re.compile(r"\D")
 _EMAIL_RE = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+_MAC_RE = re.compile(
+    r"^((?:[0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|(?:[0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2}|(?:[0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4})$"
+)
 _CNPJ_WEIGHTS_1 = (5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
 _CNPJ_WEIGHTS_2 = (6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
 
@@ -147,4 +150,11 @@ def is_valid_uuid(uuid_to_test: str, version: Optional[int] = None) -> bool:
         return True
     except (ValueError, AttributeError):
         return False
+
+
+def is_valid_mac_address(mac: str) -> bool:
+    """Valida se uma string e um endereco MAC valido nos formatos padrao (: ou -) ou pontilhado."""
+    if not isinstance(mac, str):
+        return False
+    return bool(_MAC_RE.match(mac.strip()))
 
